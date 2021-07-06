@@ -2,6 +2,7 @@ import React,{useEffect, useState } from 'react';
 import {Button, Table} from "antd"
 import { Container } from './styles';
 import axios from 'axios';
+import InputButton from '../Input-button';
 
 const ContentInfo: React.FC = () => {
 
@@ -71,6 +72,7 @@ const Colunas = [
   return (
 
     <Container>
+      <InputButton/>
     <Table columns={Colunas} dataSource={data} rowKey={"id"}>
     </Table>
     

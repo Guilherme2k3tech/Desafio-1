@@ -9,6 +9,14 @@ const ContentInfo: React.FC = () => {
 const [data, setData] = useState([
 ])
 
+const [vault, setVault] = useState({
+
+  name: String,
+  id: Number,
+  folders: Number,
+})
+
+
 const Colunas = [
   {
     id: "id",
@@ -29,9 +37,9 @@ const Colunas = [
     id: "ações",
     title: 'ações',
     dataIndex:"id",
-    render: (id:772) => (
+    render: (id:1) => (
       <>
-        <Button type="primary" danger onClick={() => (id)}> Deletar </Button>
+        <Button type="primary" danger> Deletar </Button>
       </>    
     )},
 ];
@@ -44,28 +52,13 @@ const Colunas = [
 
   ])
 
-  const deleteMethod = {
-    method: 'DELETE',
-    headers: {
-     'Content-type': 'application/json; charset=UTF-8'
-    },
-   }
 
-   fetch(("http://localhost:3001/vaults"), deleteMethod) 
-   .then(response => response.json())
-   .then(data => console.log(data)) 
-   .catch(err => console.log(err))
-
-
-
-   
   
   return (
 
     <Container>
     <Table columns={Colunas} dataSource={data}>
     </Table>
-    <Button onClick={() => deleteMethod}></Button>
 
     </Container>
 

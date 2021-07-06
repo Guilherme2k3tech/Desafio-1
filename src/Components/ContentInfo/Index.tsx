@@ -2,7 +2,6 @@ import React,{useEffect, useState } from 'react';
 import {Button, Table} from "antd"
 import { Container } from './styles';
 import axios from 'axios';
-import { type } from 'os';
 
 const ContentInfo: React.FC = () => {
 
@@ -16,49 +15,65 @@ const [vault, setVault] = useState({
   folders: Number,
 })
 
+const baseUrl = "http://localhost:3001/vaults"; 
+
 
 const Colunas = [
   {
-    id: "id",
+    key:  "id",
     title: 'id',
     dataIndex: 'id',
   },
   {
-    id: "name",
+    key:  "name",
     title: 'name',
     dataIndex: 'name',
   },
   {
-    id: "folders",
+    key:  "folders",
     title: 'folders', 
     dataIndex: 'folders',
   },
   {
-    id: "ações",
+    key:  "ações",
     title: 'ações',
     dataIndex:"id",
     render: (id:1) => (
       <>
-        <Button type="primary" danger> Deletar </Button>
+        <Button type="primary" danger > Deletar </Button>
       </>    
     )},
 ];
 
-  useEffect(()=>{}, [
+    const Get = async () => {
+      try {
+        const { data } = await axios.get(baseUrl)
+        setData(data);
+        console.log(data)
+      } catch (error) {
+        console.log(error)
 
-    fetch("http://localhost:3001/vaults").then(resp=>resp.json())
-    .then(resp=>setData(resp)),
-    console.log(data)
+        
+      }
+    }
 
-  ])
+     useEffect(() => {
+      axios.delete(baseUrl + data)
+          .then();
+  }, []);
+ 
 
 
+  useEffect(() => {
+    Get();
+  }, [])
   
   return (
 
     <Container>
-    <Table columns={Colunas} dataSource={data}>
+    <Table columns={Colunas} dataSource={data} rowKey={"id"}>
     </Table>
+    
 
     </Container>
 

@@ -1,0 +1,12 @@
+<Search type="text" value={search} onChange={(e) => setSearch(e.target.value)}/>
+          {data.map((data) => {
+             if (search == "" || data.name.toLowerCase().includes(search || "".toLowerCase())) {
+                 return (
+                     <li key={data.name}>
+                         <h3>ID: {data.id}</h3>
+                         <p>Nome : {data.name}</p>
+                     </li>
+                 );
+             }
+             return null;
+            })}

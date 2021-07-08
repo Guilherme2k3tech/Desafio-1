@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Form, Input, Modal} from 'antd';
+import { Table, Button, Form, Input, Modal, Space, Switch, Select, Divider } from 'antd';
 import 'antd/dist/antd.css';
 import axios from 'axios';
 import { Container } from './styles';
+import Search from 'antd/lib/input/Search';
 
 const { Item } = Form;
 const baseUrl = "http://localhost:3001/vaults";
@@ -15,10 +16,11 @@ const contentStyle = {
   background: '#364d79',
 };
 
-
-
 function VaultContent() {
 
+  const [search, setSearch] = useState<string | undefined>();
+/*   const [searchOutput, setSearchOutput] = useState<any[1]>();
+ */
   const [form] = Form.useForm();
 
 
@@ -32,18 +34,22 @@ function VaultContent() {
     id: "",
     name: "",
     folders: "",
-    Cofre: "",  
-  })  
+    Cofre: "",
+  })
 
-  const onFinish = (values:any) => {
+  const onFinish = (values: any) => {
     console.log(values);
   };
 
-  const abrirFecharModal = (type:any) => {
+  const abrirFecharModal = (type: any) => {
     setModalX(type)
   }
 
-  const selectVault = (id:any, caso:any) => {
+  const handleChange = (e: { target: { value: string; }; }) => {
+    setSearch(e.target.value);
+  };
+
+  const selectVault = (id: any, caso: any) => {
     console.log(id, caso)
     const CofreFilter = (data.filter(a => a.id === id)[0]);
     form.setFieldsValue({
@@ -75,7 +81,7 @@ function VaultContent() {
       title: 'Ações',
       key: "Ações",
       dataIndex: "id",
-      render: (id:any) => (
+      render: (id: any) => (
         <>
           {/* <Button type="primary" onClick={() => selectVault(id, "Editar")}> Editar </Button> */}
           <Button type="primary" danger onClick={() => selectVault(id, "Deletar")}> Deletar </Button>
@@ -131,16 +137,16 @@ function VaultContent() {
     }
   }
 
+
   useEffect(() => {
     Get();
   }, [])
 
 
   const Modalform = () => {
-
     return (
       <>
-        <Modal 
+        <Modal
           visible={modalX === 'insert' || modalX === 'edit'}
           title={modalX === "insert" ? "Adicionar Cofre" : "Editar"}
           onCancel={() => abrirFecharModal('')}
@@ -152,17 +158,17 @@ function VaultContent() {
               .validateFields()
               .then((values) => {
                 form.resetFields();
-              /*   if (modalX === "insert") {
-                  PostAPI(values)
-                }
-                else {
-                  PutAPI(values)
-                } */
+                /*   if (modalX === "insert") {
+                    PostAPI(values)
+                  }
+                  else {
+                    PutAPI(values)
+                  } */
               })
               .catch((info) => {
                 console.log('Validate Failed:', info);
               });
-          }}
+          } }
         >
           <Form form={form} onFinish={onFinish}>
             <Item label="Nome" name="name">
@@ -171,33 +177,61 @@ function VaultContent() {
             <Item label="Pastas" name="folders">
               <Input name="folders" />
             </Item>
-            <Item label="id" name="id" hidden >
+            <Item label="id" name="id" hidden>
               <Input name="id" />
+            </Item>
+            <Item>
+              <Select defaultValue="Usuários" style={{ width: 120 }}>
+              </Select>
+              <Divider type="vertical" />
+              <Switch /> Somente Leitura
+              <Divider type="vertical" />
+              <Switch /> Editar
             </Item>
           </Form>
         </Modal>
-        <Modal  //modal deletar
+        <Modal
           visible={modalX === 'delete'}
           onCancel={() => abrirFecharModal('')}
           centered
-          onOk={() =>
-            DeleteAPI()
-          }
+          onOk={() => DeleteAPI()}
         >
           Tem certeza de que quer deletar o cofre?<b>{Cofre && Cofre.Cofre}</b>?
         </Modal>
       </>
-    )
+    );
   }
 
   const MainApp = () => {
 
-    return (
+    return (  
       <>
         <br />
+        
+        {/* button */}
         <Button type="primary" className="botaoADD" onClick={() => abrirFecharModal('insert')}>Adicionar Cofre</Button>
         <br />
         <br />
+
+        {/* input-search*/}
+
+          <Search type="text" value={search} onChange={(e) => setSearch(e.target.value)}/>
+          {data.map((data) => {
+             if (search == "" || data.name.toLowerCase().includes(search || "".toLowerCase())) {
+                 return (
+                     <li key={data.name}>
+                         <h3>ID: {data.id}</h3>
+                         <p>Nome : {data.name}</p>
+                     </li>
+                 );
+             }
+             return null;
+            })}
+             
+      <br></br>
+      <br></br>
+      <br></br>
+        {/* table */}
 
         <Table columns={colunas} dataSource={data} rowKey={"id"}>
         </Table>
@@ -209,7 +243,7 @@ function VaultContent() {
   return (
     <div className="App">
       <Container>
-      <MainApp />
+        <MainApp />
       </Container>
     </div>
 

@@ -1,0 +1,10 @@
+const PostAPI = async (values:any) => {
+    try {
+      const { data: novoCofre } = await axios.post(baseUrl, values)
+      console.log(novoCofre, "Cofre")
+      setData([...data, novoCofre])
+      abrirFecharModal('')
+    } catch (error) {
+      console.log(error);
+    }
+  }
